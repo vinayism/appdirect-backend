@@ -5,11 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import oauth.signpost.OAuthConsumer;
+import oauth.signpost.basic.DefaultOAuthConsumer;
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+import oauth.signpost.exception.OAuthMessageSignerException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Logger;
@@ -29,12 +30,6 @@ import com.vinay.model.SubscriptionEvent;
 import com.vinay.model.SubscriptionResponseDto;
 import com.vinay.service.SubscriptionService;
 
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.basic.DefaultOAuthConsumer;
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
-import oauth.signpost.exception.OAuthMessageSignerException;
-
 @RestController
 public class SubscriptionIntegrationController {
 
@@ -42,23 +37,6 @@ public class SubscriptionIntegrationController {
 
 	@Autowired
 	private SubscriptionService subscriptionService;
-
-	@RequestMapping(value = "/test/create", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public void createTest(HttpServletRequest request) {
-		List<String> requestParameterNames = Collections.list((Enumeration<String>) request.getParameterNames());
-		System.out.println("Parameter number: " + requestParameterNames.size());
-
-		for (String parameterName : requestParameterNames) {
-			System.out.println(
-					"Parameter name: " + parameterName + " - Parameter value: " + request.getParameter(parameterName));
-		}
-		
-		Enumeration<String> headerNames = request.getHeaderNames();
-		while(headerNames.hasMoreElements()) {
-		  String headerName = (String)headerNames.nextElement();
-		  System.out.println("" + headerName + ": " + request.getHeader(headerName));
-		}
-	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public SubscriptionResponseDto createSubscription(@RequestParam String eventUrl) {
